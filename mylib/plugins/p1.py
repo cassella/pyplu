@@ -13,16 +13,20 @@ class field:
 def get_a_str(p1, name):
     return p1.__dict__[name]
 
+def get_an_int(p1, name):
+    return str(p1.__dict__[name])
+
 p1_fields = {}
 
 field(p1_fields, "a_str", "STR", 8, get_a_str)
+field(p1_fields, "an_int", "INT", 4, get_an_int)
 
-
-default_p1_fields=[p1_fields["a_str"]]
+default_p1_fields=[p1_fields["a_str"], p1_fields["an_int"]]
 
 def show_p1(p1, fields):
     for f in fields:
-        print f.getstr(p1, f.name)
+        print f.getstr(p1, f.name),
+    print
 
 
 def add_p1_args(parser):
