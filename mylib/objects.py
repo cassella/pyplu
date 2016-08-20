@@ -37,7 +37,6 @@ class reportobj:
 
     def desc_to_field(self, desc):
         return self.fields[desc]
-
     def descs_to_fields(self, descs):
         return map(self.desc_to_field, descs)
 
@@ -55,18 +54,24 @@ class reportobj:
         def add_ro_fields(arg):
             return self.report_extra_fielddescs(arg)
         def replace_ro_fields(arg):
-            return self.report_specific_fielddescs(arg.split(","))
+            return self.report_specific_fielddescs(arg)
         def report_default_fields():
             return self.report_default_fielddescs()
 
-        parser.add_argument("--" + self.name, action="append_const", dest="report",
-                            help="show {ro} default fields".format(ro=self.name),
+        parser.add_argument("--" + self.name, action="append_const",
+                            dest="report",
+                            help="show {ro} default fields".format(
+                                ro=self.name),
                             const=report_default_fields())
-        parser.add_argument("--" + self.name + "+", action="append", dest="report",
-                            help="show {ro} with additional fields".format(ro=self.name),
+        parser.add_argument("--" + self.name + "+", action="append",
+                            dest="report",
+                            help="show {ro} with additional fields".format(
+                                ro=self.name),
                             metavar="EXTRA",
                             type=add_ro_fields)
-        parser.add_argument("--" + self.name + "-", action="append", dest="report",
-                            help="show {ro} with only these fields".format(ro=self.name),
+        parser.add_argument("--" + self.name + "-", action="append",
+                            dest="report",
+                            help="show {ro} with only these fields".format(
+                                ro=self.name),
                             metavar="FIELDS",
                             type=replace_ro_fields)

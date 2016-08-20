@@ -13,8 +13,6 @@ field(p1, "an_int", "an_int", "I", 2, get_an_int)
 field(p1, "an_inttwo", "an_inttwo", "INT2", 4, get_an_int)
 field(p1, "an_inttwo-hex", "an_inttwo", "INT2", 4, get_an_int_hex)
 
-p1.default_fields = p1.descs_to_fields(default_p1_fielddescs)
-
 def add_p1_args(parser):
     return p1.add_args(parser)
 
