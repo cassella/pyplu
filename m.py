@@ -11,4 +11,5 @@ mylib.add_args(parser)
 
 args = parser.parse_args()
 
-print args
+for (r,f) in args.report:
+    r("singleton", f)
