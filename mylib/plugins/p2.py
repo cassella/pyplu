@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
-from mylib import things
+from mylib import Plugin
 
-things["p2"] = "this is p2"
+def add_p2_args(parser):
+    parser.add_argument("--p2")
+
+
+Plugin("p2", add_p2_args)
