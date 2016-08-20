@@ -22,6 +22,13 @@ mylib.add_args(parser)
 
 args = parser.parse_args()
 
+hdr = ""
+for ro in args.report:
+    hdr += ro.header()
+print(hdr)
+
 for o in testobjs:
+    s = ""
     for ro in args.report:
-        ro.show(o)
+        s += ro.show(o)
+    print(s)

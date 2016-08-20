@@ -25,9 +25,17 @@ class objreporter:
         self.fields = fields
 
     def show(self, obj):
+        l = []
         for f in self.fields:
-            print f.getstr(obj, f.name),
-        print
+            s = "{v:{width}}".format(v=f.getstr(obj,f.name), width=f.width)
+            l.append(s)
+        return " ".join(l)
+
+    def header(self):
+        s = ""
+        for f in self.fields:
+            s += "{hdr:{width}} ".format(hdr=f.hdrname, width=f.width)
+        return s
 
 class reportobj:
     def __init__(self, name, default_fielddescs):
