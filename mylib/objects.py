@@ -39,3 +39,23 @@ class reportobj:
     def add_fields(self, arg):
         fieldnames = self.default_fielddescs + arg.split(",")
         return (self, self.descs_to_fields(fieldnames))
+
+    def add_args(self, parser):
+        # closures so we can pass these as type=<> params to argparse
+        def add_ro_fields(arg):
+            return self.add_fields(arg)
+
+        def replace_ro_fields(self, arg):
+            return (self, self.descs_to_fields(arg.split(",")))
+
+        parser.add_argument("--" + self.name, action="append_const", dest="report",
+                            help="show {ro} default fields".format(ro=self.name),
+                            const=(self, self.default_fields))
+        parser.add_argument("--" + self.name + "+", action="append", dest="report",
+                            help="show {ro} with additional fields".format(ro=self.name),
+                            metavar="EXTRA",
+                            type=add_ro_fields)
+        parser.add_argument("--" + self.name + "-", action="append", dest="report",
+                            help="show {ro} with only these fields".format(ro=self.name),
+                            metavar="FIELDS",
+                            type=replace_ro_fields)
