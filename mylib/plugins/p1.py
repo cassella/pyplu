@@ -21,7 +21,13 @@ p1_fields = {}
 field(p1_fields, "a_str", "STR", 8, get_a_str)
 field(p1_fields, "an_int", "INT", 4, get_an_int)
 
-default_p1_fields=[p1_fields["a_str"], p1_fields["an_int"]]
+default_p1_fieldnames=["a_str", "an_int"]
+
+def fieldname_to_field(fieldname):
+    return p1_fields[fieldname]
+
+def fieldnames_to_fields(fieldnames):
+    return map(fieldname_to_field, fieldnames)
 
 def show_p1(p1, fields):
     for f in fields:
@@ -31,6 +37,6 @@ def show_p1(p1, fields):
 
 def add_p1_args(parser):
     parser.add_argument("--p1", action="append_const", dest="report",
-                        const=(show_p1,default_p1_fields))
+                        const=(show_p1,fieldnames_to_fields(default_p1_fieldnames)))
 
 Plugin("p1", add_p1_args)
