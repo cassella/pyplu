@@ -19,6 +19,16 @@ def get_an_int_hex(p1, name):
     return "{:x}".format(p1.__dict__[name])
 
 
+class objreporter:
+    def __init__(self, ro, fields):
+        self.ro = ro
+        self.fields = fields
+
+    def show(self, obj):
+        for f in self.fields:
+            print f.getstr(obj, f.name),
+        print
+
 class reportobj:
     def __init__(self, name, default_fielddescs):
         self.fields = {}
@@ -31,26 +41,27 @@ class reportobj:
     def descs_to_fields(self, descs):
         return map(self.desc_to_field, descs)
 
-    def show(self, obj, fields):
-        for f in fields:
-            print f.getstr(obj, f.name),
-        print
-
-    def add_fields(self, arg):
-        fieldnames = self.default_fielddescs + arg.split(",")
-        return (self, self.descs_to_fields(fieldnames))
+    def report_default_fielddescs(self):
+        return objreporter(self, self.descs_to_fields(self.default_fielddescs))
+    def report_extra_fielddescs(self, arg):
+        fielddescs = self.default_fielddescs + arg.split(",")
+        return objreporter(self, self.descs_to_fields(fielddescs))
+    def report_specific_fielddescs(self, arg):
+        fielddescs = arg.split(",")
+        return objreporter(self, self.descs_to_fields(fielddescs))
 
     def add_args(self, parser):
         # closures so we can pass these as type=<> params to argparse
         def add_ro_fields(arg):
-            return self.add_fields(arg)
-
-        def replace_ro_fields(self, arg):
-            return (self, self.descs_to_fields(arg.split(",")))
+            return self.report_extra_fielddescs(arg)
+        def replace_ro_fields(arg):
+            return self.report_specific_fielddescs(arg.split(","))
+        def report_default_fields():
+            return self.report_default_fielddescs()
 
         parser.add_argument("--" + self.name, action="append_const", dest="report",
                             help="show {ro} default fields".format(ro=self.name),
-                            const=(self, self.default_fields))
+                            const=report_default_fields())
         parser.add_argument("--" + self.name + "+", action="append", dest="report",
                             help="show {ro} with additional fields".format(ro=self.name),
                             metavar="EXTRA",
