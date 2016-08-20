@@ -23,5 +23,5 @@ mylib.add_args(parser)
 args = parser.parse_args()
 
 for o in testobjs:
-    for (r,f) in args.report:
-        r(o, f)
+    for (ro,f) in args.report:
+        ro.show(o, f)
